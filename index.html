@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Protótipo acadêmico da Rede Raízes do Nordeste: cardápio por unidade, pedido, pagamento simulado e fidelidade.">
+  <title>Raízes do Nordeste | Peça com sabor</title>
+  <link rel="icon" href="assets/logo-raizes.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" data-view="menu" aria-label="Raízes do Nordeste - início">
+      <img class="brand-logo" src="assets/logo-raizes.png" alt="Logotipo Raízes do Nordeste">
+      <strong>Raízes do Nordeste</strong>
+    </a>
+    <nav class="main-nav" aria-label="Navegação principal">
+      <button class="nav-link active" data-view="menu">Cardápio</button>
+      <button class="nav-link" data-view="orders">Meus pedidos</button>
+      <button class="nav-link" data-view="rewards">Fidelidade</button>
+      <button class="nav-link" data-view="privacy">Privacidade</button>
+    </nav>
+    <div class="header-actions">
+      <button class="link-button" id="user-button" data-action="open-auth">Entrar</button>
+      <button class="cart-button" id="cart-open" aria-label="Abrir carrinho">Carrinho <b id="cart-count">0</b></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-copy">
+        <h1>COMIDA NORDESTINA NA SUA MESA!</h1>
+        <p>Baião de dois, carne de sol, cuscuz e tapioca, feitos todo dia nas nossas três unidades. Você retira no balcão ou recebe em casa.</p>
+        <button class="button button-yellow" id="hero-order">Ver o cardápio</button>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-badge"><img src="assets/logo-raizes.png" alt=""></div>
+      </div>
+    </section>
+
+    <!-- CARDÁPIO -->
+    <section id="menu-view" class="view">
+      <div class="section-heading">
+        <div>
+          <h2>Cardápio</h2>
+          <p class="muted" id="unit-info"></p>
+        </div>
+        <label class="unit-select">Unidade
+          <select id="unit-select">
+            <option value="centro">Unidade Centro</option>
+            <option value="norte">Unidade Norte</option>
+            <option value="sul">Unidade Sul</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="promo-strip" class="promo-strip" aria-label="Promoções ativas"></div>
+
+      <div class="category-row" id="categories">
+        <button class="category active" data-category="Todos">Todos</button>
+        <button class="category" data-category="Pratos">Pratos</button>
+        <button class="category" data-category="Lanches">Lanches</button>
+        <button class="category" data-category="Bebidas">Bebidas</button>
+      </div>
+      <div id="product-grid" class="product-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- PEDIDOS -->
+    <section id="orders-view" class="view hidden">
+      <div class="section-heading"><div><h2>Meus pedidos</h2><p class="muted">Veja em que etapa está cada pedido, do envio até a retirada ou entrega.</p></div></div>
+      <div id="orders-list" class="orders-list"></div>
+    </section>
+
+    <!-- FIDELIDADE -->
+    <section id="rewards-view" class="view hidden">
+      <div class="section-heading"><div><h2>Seus pontos</h2><p class="muted">Cada R$ 1 em pedido pago vale 1 ponto. Pedido cancelado ou recusado não pontua.</p></div></div>
+      <div class="points-card"><span>SEU SALDO</span><strong id="points-balance">0</strong><span>pontos</span></div>
+      <div class="reward-grid">
+        <article class="reward-card"><h3>R$ 10 de desconto</h3><p>Troque 100 pontos por um desconto que vale no próximo pedido.</p><button class="button button-outline" data-action="redeem-discount">Trocar 100 pontos</button></article>
+        <article class="reward-card"><h3>Produto grátis</h3><p>Com 500 pontos, você escolhe um item da lista de recompensas.</p><button class="button button-outline" data-action="redeem-product">Trocar 500 pontos</button></article>
+      </div>
+      <h3 class="sub-title">Recompensas disponíveis</h3>
+      <div id="voucher-list" class="voucher-list"></div>
+    </section>
+
+    <!-- PRIVACIDADE (LGPD) -->
+    <section id="privacy-view" class="view hidden">
+      <div class="section-heading"><div><h2>Privacidade e seus dados</h2><p class="muted">Veja o que guardamos, para que serve, e mude ou apague quando quiser.</p></div></div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Dado</th><th>Para que usamos</th><th>Base legal (LGPD, art. 7º)</th><th>Obrigatório?</th></tr></thead>
+          <tbody>
+            <tr><td>Nome</td><td>Identificar o pedido e chamar você na retirada</td><td>Execução de contrato (V)</td><td>Sim</td></tr>
+            <tr><td>E-mail</td><td>Login e avisos sobre o pedido</td><td>Execução de contrato (V)</td><td>Sim</td></tr>
+            <tr><td>Telefone</td><td>Contato do atendente ou entregador</td><td>Execução de contrato (V)</td><td>Sim</td></tr>
+            <tr><td>Senha</td><td>Proteger o acesso à conta (guardada só como hash)</td><td>Execução de contrato (V)</td><td>Sim</td></tr>
+            <tr><td>CEP</td><td>Calcular taxa e cobertura de entrega</td><td>Execução de contrato (V)</td><td>Só para entrega</td></tr>
+            <tr><td>Histórico de pedidos e pontos</td><td>Acompanhamento e programa de fidelidade</td><td>Execução de contrato (V)</td><td>Sim</td></tr>
+            <tr><td>Preferência de marketing</td><td>Enviar ofertas e campanhas</td><td>Consentimento (I)</td><td><strong>Não</strong>, você escolhe</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice">Não coletamos dados de cartão: o pagamento é feito por um serviço externo e a rede só recebe o resultado (aprovado ou recusado).</p>
+
+      <div id="privacy-panel" class="privacy-panel"></div>
+    </section>
+
+    <!-- PAINEL DA EQUIPE (demonstração dos demais atores) -->
+    <section id="staff-view" class="view hidden">
+      <div class="section-heading"><div><h2>Painel da equipe</h2><p class="muted">Num sistema de verdade cada perfil teria o seu login. Aqui as três telas ficam juntas para testar o fluxo inteiro.</p></div></div>
+      <div class="auth-tabs staff-tabs" role="tablist">
+        <button class="active" data-staff="atendente">Atendente</button>
+        <button data-staff="cozinha">Cozinha</button>
+        <button data-staff="gerente">Gerente</button>
+      </div>
+      <div id="staff-content"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="demo-bar">
+      <p><strong>Só para a apresentação:</strong> veja este mesmo site como</p>
+      <div class="channel-switch" role="group" aria-label="Canal de demonstração">
+        <button class="channel active" data-channel="web">Web</button>
+        <button class="channel" data-channel="app">App</button>
+        <button class="channel" data-channel="totem">Totem</button>
+        <button class="channel staff-toggle" data-view="staff">Painel da equipe</button>
+      </div>
+    </div>
+    <div class="footer-line">
+      <span class="footer-brand"><img src="assets/logo-raizes.png" alt="">Raízes do Nordeste</span>
+      <span>Protótipo para trabalho da faculdade. RU: 4970321</span>
+      <button class="link-button" data-view="privacy">Aviso de privacidade</button>
+    </div>
+  </footer>
+
+  <!-- Barra de aviso LGPD -->
+  <div class="consent-bar hidden" id="consent-bar" role="region" aria-label="Aviso de privacidade">
+    <p>Guardamos no seu navegador só o que o pedido precisa: sua conta de teste, o carrinho e os pedidos. Não usamos cookie de propaganda.</p>
+    <div><button class="button button-outline" data-view="privacy" data-action="dismiss-consent">Ler aviso</button><button class="button button-primary" data-action="dismiss-consent">Entendi</button></div>
+  </div>
+
+  <!-- Carrinho -->
+  <div class="overlay hidden" id="cart-overlay">
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <div class="drawer-head"><h2 id="cart-title">Seu carrinho</h2><button class="icon-button" data-close="cart-overlay" aria-label="Fechar">×</button></div>
+      <p class="muted tiny" id="cart-unit"></p>
+      <div id="cart-items" class="cart-items"></div>
+      <div class="checkout-fields">
+        <label>Como você prefere receber?
+          <select id="fulfillment"><option value="delivery">Entrega</option><option value="pickup">Retirar na unidade</option></select>
+        </label>
+        <label id="cep-field">CEP de entrega
+          <input id="cep" inputmode="numeric" maxlength="9" placeholder="Ex.: 74000-000" autocomplete="postal-code">
+          <small id="cep-feedback" class="muted">Digite o CEP para ver se entregamos aí.</small>
+        </label>
+        <label>Cupom
+          <span class="coupon-row"><input id="coupon" placeholder="Ex.: BEMVINDO10" autocomplete="off"><button type="button" class="button button-outline" id="coupon-apply">Aplicar</button></span>
+          <small id="coupon-feedback" class="muted"></small>
+        </label>
+        <label>Recompensa
+          <select id="voucher-select"><option value="">Não usar</option></select>
+        </label>
+      </div>
+      <div class="totals">
+        <div><span>Subtotal</span><strong id="subtotal">R$ 0,00</strong></div>
+        <div><span>Entrega</span><strong id="delivery-fee">R$ 0,00</strong></div>
+        <div><span>Descontos</span><strong id="discount-value">R$ 0,00</strong></div>
+        <div class="total-line"><span>Total</span><strong id="total">R$ 0,00</strong></div>
+      </div>
+      <button class="button button-primary full" id="checkout-button">Enviar pedido ao atendente</button>
+      <p class="tiny muted">O atendente confere o pedido antes. O pagamento só é pedido depois da confirmação.</p>
+    </aside>
+  </div>
+
+  <!-- Login / cadastro -->
+  <div class="overlay hidden" id="auth-overlay">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <button class="icon-button modal-close" data-close="auth-overlay" aria-label="Fechar">×</button><h2 id="auth-title">Entrar</h2>
+      <div class="auth-tabs"><button class="active" data-auth="login">Entrar</button><button data-auth="register">Criar conta</button></div>
+      <form id="auth-form" novalidate>
+        <label id="name-wrap" class="hidden">Nome<input id="auth-name" autocomplete="name"></label>
+        <label>E-mail<input id="auth-email" type="email" autocomplete="email" placeholder="voce@email.com"></label>
+        <label id="phone-wrap" class="hidden">Telefone<input id="auth-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(62) 90000-0000"></label>
+        <label>Senha<input id="auth-password" type="password" autocomplete="current-password" placeholder="Mínimo de 6 caracteres"></label>
+        <label id="privacy-wrap" class="check-label hidden"><input id="privacy" type="checkbox"><span>Li o <a href="#" data-view="privacy" data-close="auth-overlay">aviso de privacidade</a> e sei que meus dados serão usados para processar meus pedidos.</span></label>
+        <label id="marketing-wrap" class="check-label hidden"><input id="marketing" type="checkbox"><span>Quero receber ofertas e novidades. <em>(opcional, dá para mudar depois)</em></span></label>
+        <p id="auth-error" class="form-error" role="alert"></p>
+        <button class="button button-primary full" type="submit" id="auth-submit">Entrar</button>
+      </form>
+      <p class="tiny muted">Demonstração: os dados ficam só neste navegador. Não use sua senha de verdade.</p>
+    </section>
+  </div>
+
+  <!-- Pagamento (serviço externo simulado) -->
+  <div class="overlay hidden" id="pay-overlay">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="pay-title">
+      <button class="icon-button modal-close" data-close="pay-overlay" aria-label="Fechar">×</button><h2 id="pay-title">Pedido #<span id="pay-order-id"></span></h2>
+      <p class="pay-total">Total: <strong id="pay-total"></strong></p>
+      <div id="pay-form">
+        <div class="auth-tabs"><button class="active" data-paymethod="pix">PIX</button><button data-paymethod="card">Cartão</button></div>
+        <div id="pay-pix" class="pay-box">
+          <div class="qr" aria-hidden="true"></div>
+          <p class="tiny muted">QR Code ilustrativo. Em um sistema real, ele viria do provedor de pagamento.</p>
+        </div>
+        <div id="pay-card" class="pay-box hidden">
+          <label>Número do cartão<input id="card-number" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" autocomplete="off"></label>
+          <div class="two-cols">
+            <label>Validade<input id="card-exp" inputmode="numeric" maxlength="5" placeholder="MM/AA" autocomplete="off"></label>
+            <label>CVV<input id="card-cvv" inputmode="numeric" maxlength="4" placeholder="000" autocomplete="off"></label>
+          </div>
+          <p class="tiny muted">Teste: cartão terminado em 0000 simula pagamento recusado. Os dados do cartão não são guardados.</p>
+        </div>
+        <p id="pay-error" class="form-error" role="alert"></p>
+        <button class="button button-primary full" id="pay-submit">Enviar solicitação de pagamento</button>
+      </div>
+      <div id="pay-result" class="pay-result hidden" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <!-- Escolha de produto grátis -->
+  <div class="overlay hidden" id="reward-overlay">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="reward-title">
+      <button class="icon-button modal-close" data-close="reward-overlay" aria-label="Fechar">×</button><h2 id="reward-title">Escolha seu produto grátis</h2>
+      <div id="reward-options" class="reward-options"></div>
+    </section>
+  </div>
+
+  <!-- Aviso genérico -->
+  <div class="overlay hidden" id="status-overlay">
+    <section class="modal status-modal" role="dialog" aria-modal="true" aria-labelledby="status-title">
+      <button class="icon-button modal-close" data-close="status-overlay" aria-label="Fechar">×</button><h2 id="status-title"></h2>
+      <p id="status-message" class="muted"></p>
+      <button class="button button-outline full" data-close="status-overlay">Fechar</button>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
