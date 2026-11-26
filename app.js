@@ -1,5 +1,4 @@
-/* Raízes do Nordeste - protótipo front-end
-   Tudo é simulado no navegador (localStorage). Não existe servidor nem pagamento real. */
+/* Raízes do Nordeste - protótipo front-end */
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
